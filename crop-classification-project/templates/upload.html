@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Image — DeepCrop AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <div class="app-layout">
+
+        <!-- ===== FLOATING SIDEBAR BOX ===== -->
+        <aside class="sidebar-box" id="sidebar">
+            <div class="sidebar-header">
+                <a href="/" class="sidebar-logo">
+                    <span class="logo-icon">🛰️</span>
+                    <span class="nav-text">Deep<span class="logo-accent">Crop</span> AI</span>
+                </a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-item {{ 'active' if request.path == '/' }}"><span class="nav-icon">🏠</span>
+                    <span class="nav-text">Dashboard</span></a>
+                <a href="/upload" class="nav-item {{ 'active' if request.path == '/upload' }}"><span
+                        class="nav-icon">📤</span> <span class="nav-text">Upload Image</span></a>
+                <a href="/models" class="nav-item {{ 'active' if request.path == '/models' }}"><span
+                        class="nav-icon">📊</span> <span class="nav-text">Model Comparison</span></a>
+                <a href="/#about" class="nav-item"><span class="nav-icon">ℹ️</span> <span class="nav-text">About
+                        Project</span></a>
+            </nav>
+            <div class="sidebar-footer">
+                <p>© 2024 DeepCrop AI</p>
+                <p>Final Year Project</p>
+            </div>
+        </aside>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+
+
+        <div id="earth-container"></div>
+        <main class="main-content">
+
+            <header class="top-header">
+                <button class="nav-toggle" id="desktopToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <div class="header-actions">
+                    <div class="header-badge"><span class="pulse-dot"></span> Ready</div>
+                </div>
+            </header>
+
+            <section class="page-header">
+                <div class="page-header-content">
+                    <span class="section-tag">Step 1</span>
+                    <h1 class="page-title">Upload Satellite Image</h1>
+                    <p class="page-subtitle">Upload a Sentinel-2 satellite image or any crop field image for AI-powered
+                        classification.</p>
+                </div>
+            </section>
+
+            <section class="section upload-section">
+                <div class="page-content">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            {% for category, message in messages %}
+                            {% if category == 'error' %}
+                            alert("\u26A0\uFE0F Invalid Image Detected!\n\n{{ message }}\n\nPlease upload a proper satellite image of a crop field.");
+                            {% endif %}
+                            {% endfor %}
+                        });
+                    </script>
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">
+                            <span>{% if category == 'error' %}⚠️{% else %}✅{% endif %}</span>
+                            {{ message }}
+                            <button class="flash-close" onclick="this.parentElement.remove()">×</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+
+                    <div class="upload-grid">
+                        <div class="upload-card">
+                            <form action="/predict" method="POST" enctype="multipart/form-data" id="uploadForm">
+                                <div class="drop-zone" id="dropZone">
+                                    <div class="drop-zone-content" id="dropContent">
+                                        <div class="drop-icon">
+                                            <svg width="56" height="56" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                                <polyline points="17 8 12 3 7 8" />
+                                                <line x1="12" y1="3" x2="12" y2="15" />
+                                            </svg>
+                                        </div>
+                                        <h3>Drag & Drop Satellite Image</h3>
+                                        <p>or click to browse files</p>
+                                        <div class="drop-formats">
+                                            <span>PNG</span><span>JPG</span><span>JPEG</span><span>TIFF</span><span>BMP</span>
+                                        </div>
+                                        <p class="drop-size-hint">Maximum file size: 16 MB</p>
+                                    </div>
+                                    <div class="preview-container" id="previewContainer" style="display:none;">
+                                        <img id="imagePreview" alt="Preview" class="image-preview">
+                                        <div class="preview-info" id="previewInfo"></div>
+                                        <button type="button" class="btn-remove-image" id="removeImage"
+                                            title="Remove">×</button>
+                                    </div>
+                                    <input type="file" name="file" id="fileInput"
+                                        accept=".png,.jpg,.jpeg,.tif,.tiff,.bmp" hidden>
+                                </div>
+                                
+                                <!-- Sentinel-2 Validation Status (Always Active) -->
+                                <div class="validation-toggle-wrap">
+                                    <div class="toggle-info">
+                                        <h4>🛡️ Sentinel-2 Validation</h4>
+                                        <p>Multi-layer spectral analysis ensures only genuine satellite imagery is accepted.</p>
+                                    </div>
+                                    <span class="header-badge" style="pointer-events:none;"><span class="pulse-dot"></span> Active</span>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-full btn-glow" id="classifyBtn"
+                                    disabled>
+                                    <span id="btnText"><span class="btn-icon">🔬</span> Start Classification</span>
+                                    <div class="btn-loader" id="btnLoader" style="display:none;">
+                                        <div class="spinner"></div><span>Analyzing Image...</span>
+                                    </div>
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="instructions-card">
+                            <h3>📋 How It Works</h3>
+                            <div class="instruction-steps">
+                                <div class="instruction-step">
+                                    <div class="step-number">1</div>
+                                    <div class="step-content">
+                                        <h4>Upload Image</h4>
+                                        <p>Drag and drop or click to select a satellite image.</p>
+                                    </div>
+                                </div>
+                                <div class="instruction-step">
+                                    <div class="step-number">2</div>
+                                    <div class="step-content">
+                                        <h4>Preview & Confirm</h4>
+                                        <p>Review the uploaded image and click "Start Classification".</p>
+                                    </div>
+                                </div>
+                                <div class="instruction-step">
+                                    <div class="step-number">3</div>
+                                    <div class="step-content">
+                                        <h4>AI Processing</h4>
+                                        <p>Random Forest & AdaBoost analyze the spectral features.</p>
+                                    </div>
+                                </div>
+                                <div class="instruction-step">
+                                    <div class="step-number">4</div>
+                                    <div class="step-content">
+                                        <h4>View Results</h4>
+                                        <p>Get predictions with confidence scores and probabilities.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="supported-crops">
+                                <h4>Supported Crop Types</h4>
+                                <div class="crop-badges">
+                                    <span class="crop-badge rice">🌾 Rice</span>
+                                    <span class="crop-badge wheat">🌿 Wheat</span>
+                                    <span class="crop-badge maize">🌽 Maize</span>
+                                    <span class="crop-badge cotton">☁️ Cotton</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="footer">
+                <div class="container">
+                    <div class="footer-bottom">
+                        <p>© 2024 DeepCrop AI — Deep Learning for Multi Crop Classification</p>
+                    </div>
+                </div>
+            </footer>
+        </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>

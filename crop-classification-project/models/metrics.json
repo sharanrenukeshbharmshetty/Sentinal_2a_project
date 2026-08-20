@@ -1,0 +1,128 @@
+{
+  "random_forest": {
+    "accuracy": 0.9988,
+    "precision": 0.9988,
+    "recall": 0.9988,
+    "f1_score": 0.9987,
+    "confusion_matrix": [
+      [
+        598,
+        0,
+        1,
+        1
+      ],
+      [
+        0,
+        600,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        600,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        599
+      ]
+    ]
+  },
+  "adaboost": {
+    "accuracy": 0.9983,
+    "precision": 0.9983,
+    "recall": 0.9983,
+    "f1_score": 0.9983,
+    "confusion_matrix": [
+      [
+        599,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        600,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        600,
+        0
+      ],
+      [
+        1,
+        0,
+        2,
+        597
+      ]
+    ]
+  },
+  "hybrid": {
+    "accuracy": 0.9988,
+    "precision": 0.9988,
+    "recall": 0.9988,
+    "f1_score": 0.9987,
+    "confusion_matrix": [
+      [
+        598,
+        0,
+        1,
+        1
+      ],
+      [
+        0,
+        600,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        600,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        599
+      ]
+    ]
+  },
+  "crop_classes": [
+    "Rice",
+    "Wheat",
+    "Maize",
+    "Cotton"
+  ],
+  "training_info": {
+    "total_samples": 12000,
+    "samples_per_class": 3000,
+    "num_sensors_simulated": 15,
+    "sensors": [
+      "Sentinel-2 (Copernicus)",
+      "Landsat 8/9 (USGS)",
+      "MODIS (NASA)",
+      "NOAA AVHRR",
+      "Maxar WorldView",
+      "Airbus Pl\u00e9iades",
+      "Bhuvan (ISRO)",
+      "JAXA ALOS",
+      "PROBA-V",
+      "INPE CBERS",
+      "Planet Labs (Dove/SkySat)",
+      "NASA Worldview",
+      "NOAA Digital Coast",
+      "UNAVCO SAR/Optical",
+      "NOAA CLASS"
+    ],
+    "pca_components": 120,
+    "test_size": 0.2
+  }
+}

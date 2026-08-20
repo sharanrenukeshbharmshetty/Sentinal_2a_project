@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DeepCrop AI — Multi Crop Classification using Satellite Images">
+    <title>DeepCrop AI — Satellite Crop Classification</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="app-layout">
+
+        <!-- ===== FLOATING SIDEBAR BOX ===== -->
+        <aside class="sidebar-box" id="sidebar">
+            <div class="sidebar-header">
+                <a href="/" class="sidebar-logo">
+                    <span class="logo-icon">🛰️</span>
+                    <span class="nav-text">Deep<span class="logo-accent">Crop</span> AI</span>
+                </a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-item {{ 'active' if request.path == '/' }}"><span class="nav-icon">🏠</span> <span class="nav-text">Dashboard</span></a>
+                <a href="/upload" class="nav-item {{ 'active' if request.path == '/upload' }}"><span class="nav-icon">📤</span> <span class="nav-text">Upload Image</span></a>
+                <a href="/models" class="nav-item {{ 'active' if request.path == '/models' }}"><span class="nav-icon">📊</span> <span class="nav-text">Model Comparison</span></a>
+                <a href="/#about" class="nav-item"><span class="nav-icon">ℹ️</span> <span class="nav-text">About Project</span></a>
+            </nav>
+            <div class="sidebar-footer">
+                <p>© 2024 DeepCrop AI</p>
+                <p>Final Year Project</p>
+            </div>
+        </aside>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+
+        
+
+        
+        
+        
+
+        <div id="earth-container"></div>
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <button class="nav-toggle" id="desktopToggle" style="margin-right: 0;">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <a href="/upload" style="color: #67e8f9; font-family: var(--font-display); font-weight: 800; font-size: 2.2rem; text-decoration: none; transition: transform 0.3s ease; letter-spacing: -0.5px;" onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
+                        Classification
+                    </a>
+                </div>
+                <div class="header-actions">
+                    <div class="header-badge"><span class="pulse-dot"></span> System Online</div>
+                </div>
+            </header>
+
+            <!-- ===== HERO ===== -->
+            <section class="hero" id="hero">
+                <!-- Satellite Background Slideshow -->
+                
+                <div class="hero-particles" id="heroParticles"></div>
+                <div class="hero-content">
+                    <div class="hero-badge"><span class="badge-pulse"></span> 🌾 AI-Powered Crop Classification</div>
+                    <h1 class="hero-title">Deep Learning Approach for<br><span class="title-gradient">Multi Crop Classification</span><br>using Satellite Images</h1>
+                    <p class="hero-subtitle">Harness the power of machine learning and Sentinel-2 satellite imagery to accurately classify crop types including Rice, Wheat, Maize, and Cotton.</p>
+                    <div class="hero-actions">
+                        <a href="/upload" class="btn btn-primary btn-lg btn-glow"><span class="btn-icon">📤</span> Upload Satellite Image</a>
+                        <a href="/models" class="btn btn-blue btn-lg"><span class="btn-icon">📊</span> View Model Results</a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat-item"><span class="stat-number" data-count="4">4</span><span class="stat-label">Crop Types</span></div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item"><span class="stat-number">98%+</span><span class="stat-label">Accuracy</span></div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item"><span class="stat-number">3</span><span class="stat-label">ML Models</span></div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item"><span class="stat-number">4000+</span><span class="stat-label">Samples</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== INTELLIGENCE HUB ===== -->
+            <section class="section section-intelligence" id="intelligence">
+                <div class="page-content">
+                    <div class="section-header">
+                        <span class="section-tag">Real-Time Monitoring</span>
+                        <div class="header-flex">
+                            <h2 class="section-title">Satellite Intelligence Hub</h2>
+                            <button id="globalSyncBtn" class="btn btn-primary">
+                                <span class="btn-icon">🌐</span> Global Sync Analysis
+                            </button>
+                        </div>
+                        <p class="section-subtitle">Live multispectral telemetry from Sentinel-2A updates across global agricultural zones.</p>
+                    </div>
+
+                    <div id="intelligenceGrid" class="intelligence-grid">
+                        <!-- Initial Placeholder State -->
+                        <div class="intel-placeholder">
+                            <div class="intel-icon">📡</div>
+                            <h3>Await Global Synchronization</h3>
+                            <p>Click the button above to fetch the latest growth indices, rainfall estimates, and drought alerts from the planetary grid.</p>
+                        </div>
+                    </div>
+
+                    <div id="scanStatus" class="scan-status" style="display:none;">
+                        <span class="pulse-dot"></span> <span id="statusText">Scanning Geostationary Data...</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== PIPELINE ===== -->
+            <section class="section" id="pipeline">
+                <div class="page-content">
+                    <div class="section-header"><span class="section-tag">System Architecture</span><h2 class="section-title">Classification Pipeline</h2><p class="section-subtitle">End-to-end processing from satellite image to crop prediction</p></div>
+                    <div class="pipeline-grid">
+                        <div class="pipeline-card" data-step="1"><div class="pipeline-icon">🛰️</div><h3>Satellite Image</h3><p>Sentinel-2 multispectral imagery input</p></div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-card" data-step="2"><div class="pipeline-icon">📤</div><h3>Image Upload</h3><p>Drag-and-drop upload interface</p></div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-card" data-step="3"><div class="pipeline-icon">⚙️</div><h3>Preprocessing</h3><p>Resize, normalize & feature extraction</p></div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-card" data-step="4"><div class="pipeline-icon">🧠</div><h3>ML Classification</h3><p>RF, AdaBoost & Hybrid prediction</p></div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-card" data-step="5"><div class="pipeline-icon">📊</div><h3>Results</h3><p>Confidence scores & visualization</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== FEATURES ===== -->
+            <section class="section">
+                <div class="page-content">
+                    <div class="section-header"><span class="section-tag">Capabilities</span><h2 class="section-title">Key Features</h2></div>
+                    <div class="features-grid">
+                        <div class="feature-card"><div class="feature-icon-wrap"><span class="feature-icon">🌾</span></div><h3>Multi-Crop Detection</h3><p>Classify Rice, Wheat, Maize, and Cotton from satellite imagery with high precision.</p></div>
+                        <div class="feature-card"><div class="feature-icon-wrap"><span class="feature-icon">🤖</span></div><h3>Hybrid ML Model</h3><p>Combines Random Forest and AdaBoost classifiers for ultra-accurate predictions.</p></div>
+                        <div class="feature-card"><div class="feature-icon-wrap"><span class="feature-icon">🛰️</span></div><h3>Sentinel-2 Compatible</h3><p>Designed for Sentinel-2 multispectral satellite imagery analysis.</p></div>
+                        <div class="feature-card"><div class="feature-icon-wrap"><span class="feature-icon">📊</span></div><h3>Detailed Analytics</h3><p>View accuracy, precision, recall, F1-score, and confusion matrices.</p></div>
+                        <div class="feature-card"><div class="feature-icon-wrap"><span class="feature-icon">⚡</span></div><h3>Real-Time Processing</h3><p>Upload any satellite image and get instant crop classification.</p></div>
+                        <div class="feature-card"><div class="feature-icon-wrap"><span class="feature-icon">🔬</span></div><h3>Scientific Accuracy</h3><p>Image preprocessing with resizing, normalization using OpenCV.</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== CROP TYPES ===== -->
+            <section class="section">
+                <div class="page-content">
+                    <div class="section-header"><span class="section-tag">Supported Crops</span><h2 class="section-title">Crop Types We Classify</h2></div>
+                    <div class="crops-grid">
+                        <div class="crop-card crop-rice"><div class="crop-emoji">🌾</div><h3>Rice</h3><p>Identified through high NDVI values and water-surface reflectance patterns.</p><div class="crop-tag">Staple Crop</div></div>
+                        <div class="crop-card crop-wheat"><div class="crop-emoji">🌿</div><h3>Wheat</h3><p>Detected via golden-green spectral signatures in multispectral data.</p><div class="crop-tag">Cereal Grain</div></div>
+                        <div class="crop-card crop-maize"><div class="crop-emoji">🌽</div><h3>Maize</h3><p>Shows strong NIR reflectance due to broad leaves and dense canopy.</p><div class="crop-tag">Major Crop</div></div>
+                        <div class="crop-card crop-cotton"><div class="crop-emoji">☁️</div><h3>Cotton</h3><p>Distinguished by lighter-green spectral characteristics.</p><div class="crop-tag">Fiber Crop</div></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== ABOUT ===== -->
+            <section class="section" id="about">
+                <div class="page-content">
+                    <div class="about-grid">
+                        <div class="about-content">
+                            <span class="section-tag">About</span>
+                            <h2 class="section-title">Project Overview</h2>
+                            <p>This project implements a <strong style="color:var(--accent)">Deep Learning Approach for Multi Crop Classification using Satellite Images</strong>. It leverages machine learning to identify crop types from remote sensing data.</p>
+                            <p>The system processes Sentinel-2 satellite imagery through an image preprocessing pipeline using OpenCV, extracts spectral features, and applies trained models.</p>
+                            <div class="about-tech"><h4>Technologies Used</h4><div class="tech-tags">
+                                <span class="tech-tag">Python</span><span class="tech-tag">Flask</span><span class="tech-tag">scikit-learn</span><span class="tech-tag">OpenCV</span><span class="tech-tag">NumPy</span><span class="tech-tag">HTML5</span><span class="tech-tag">CSS3</span><span class="tech-tag">JavaScript</span><span class="tech-tag">Chart.js</span>
+                            </div></div>
+                            <div class="about-models"><h4>ML Models</h4><div class="model-cards">
+                                <div class="model-mini-card" style="border-color: rgba(168,85,247,0.3);"><span class="model-emoji">🧠</span><div><strong style="color: #c084fc;">Hybrid Model</strong><p>Voting classifier combining RF and AdaBoost</p></div></div>
+                                <div class="model-mini-card"><span class="model-emoji">🌲</span><div><strong>Random Forest</strong><p>Ensemble of 200 decision trees</p></div></div>
+                                <div class="model-mini-card"><span class="model-emoji">🚀</span><div><strong>AdaBoost</strong><p>Adaptive boosting with 200 weak learners</p></div></div>
+                            </div></div>
+                        </div>
+                        <div class="about-visual"><div class="about-image-container"><img src="{{ url_for('static', filename='images/satellite-icon.png') }}" alt="Satellite" class="about-image" onerror="this.style.display='none'"><div class="orbit-ring"></div><div class="orbit-ring orbit-ring-2"></div></div></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== CTA ===== -->
+            <div class="page-content"><section class="cta-section"><div class="cta-content">
+                <h2>Ready to Classify Crops?</h2>
+                <p>Upload a satellite image and let our AI identify the crop type.</p>
+                <a href="/upload" class="btn btn-primary btn-lg btn-glow"><span class="btn-icon">🚀</span> Get Started Now</a>
+            </div></section></div>
+
+            <!-- ===== FOOTER ===== -->
+            <footer class="footer"><div class="container"><div class="footer-content">
+                <div class="footer-brand"><span class="logo-icon">🛰️</span> Deep<span class="logo-accent">Crop</span> AI<p>Deep Learning for Multi Crop Classification using Satellite Images</p></div>
+                <div class="footer-links"><h4>Quick Links</h4><ul><li><a href="/">Home</a></li><li><a href="/upload">Upload Image</a></li><li><a href="/models">Model Comparison</a></li></ul></div>
+                <div class="footer-tech"><h4>Tech Stack</h4><ul><li>Python + Flask</li><li>scikit-learn</li><li>OpenCV</li><li>Chart.js</li></ul></div>
+            </div><div class="footer-bottom"><p>© 2024 DeepCrop AI — Final Year Project</p></div></div></footer>
+
+        </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Compare Random Forest and AdaBoost model performance — accuracy, precision, recall, F1-score, and confusion matrix.">
+    <title>Model Comparison — CropVision AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="logo-icon">🛰️</span>
+                <span class="logo-text">CropVision<span class="logo-accent">AI</span></span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="upload.html" class="nav-link">Upload Image</a></li>
+                <li><a href="models.html" class="nav-link active">Model Comparison</a></li>
+                <li><a href="index.html#about" class="nav-link">About</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ==================== PAGE HEADER ==================== -->
+    <section class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <span class="section-tag">Performance Analysis</span>
+                <h1 class="page-title">Model Comparison</h1>
+                <p class="page-subtitle">
+                    Compare the performance of Random Forest and AdaBoost classifiers
+                    trained on the crop classification dataset.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== METRICS SECTION ==================== -->
+    <section class="section models-section">
+        <div class="container">
+            <!-- Loading State -->
+            <div id="metricsLoading" class="metrics-loading">
+                <div class="loading-spinner-lg"></div>
+                <p>Loading model metrics...</p>
+            </div>
+
+            <!-- Metrics Content (populated by JavaScript) -->
+            <div id="metricsContent" style="display: none;">
+
+                <!-- Accuracy Overview Cards -->
+                <div class="metrics-overview">
+                    <div class="metric-hero-card rf-hero animate-in">
+                        <div class="metric-hero-icon">🌲</div>
+                        <h3>Random Forest</h3>
+                        <div class="metric-hero-value" id="rfAccuracy">—</div>
+                        <span class="metric-hero-label">Accuracy</span>
+                        <div class="metric-hero-details">
+                            <div>
+                                <span class="detail-value" id="rfPrecision">—</span>
+                                <span class="detail-label">Precision</span>
+                            </div>
+                            <div>
+                                <span class="detail-value" id="rfRecall">—</span>
+                                <span class="detail-label">Recall</span>
+                            </div>
+                            <div>
+                                <span class="detail-value" id="rfF1">—</span>
+                                <span class="detail-label">F1-Score</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="vs-badge">VS</div>
+
+                    <div class="metric-hero-card ada-hero animate-in" style="animation-delay: 0.2s;">
+                        <div class="metric-hero-icon">🚀</div>
+                        <h3>AdaBoost</h3>
+                        <div class="metric-hero-value" id="adaAccuracy">—</div>
+                        <span class="metric-hero-label">Accuracy</span>
+                        <div class="metric-hero-details">
+                            <div>
+                                <span class="detail-value" id="adaPrecision">—</span>
+                                <span class="detail-label">Precision</span>
+                            </div>
+                            <div>
+                                <span class="detail-value" id="adaRecall">—</span>
+                                <span class="detail-label">Recall</span>
+                            </div>
+                            <div>
+                                <span class="detail-value" id="adaF1">—</span>
+                                <span class="detail-label">F1-Score</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-grid">
+                    <!-- Accuracy Comparison Bar Chart -->
+                    <div class="chart-card animate-in" style="animation-delay: 0.3s;">
+                        <div class="card-header">
+                            <h3>📊 Accuracy Comparison</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="accuracyChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Performance Metrics Radar Chart -->
+                    <div class="chart-card animate-in" style="animation-delay: 0.4s;">
+                        <div class="card-header">
+                            <h3>🎯 Performance Radar</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="radarChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- RF Confusion Matrix -->
+                    <div class="chart-card animate-in" style="animation-delay: 0.5s;">
+                        <div class="card-header">
+                            <h3>🌲 Random Forest — Confusion Matrix</h3>
+                        </div>
+                        <div class="confusion-matrix-container">
+                            <table class="confusion-matrix" id="rfConfusionMatrix">
+                                <thead>
+                                    <tr id="rfCmHeader"></tr>
+                                </thead>
+                                <tbody id="rfCmBody"></tbody>
+                            </table>
+                            <div class="cm-legend">
+                                <span class="cm-axis-label">← Predicted Labels →</span>
+                                <span class="cm-axis-label-vertical">← Actual Labels →</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AdaBoost Confusion Matrix -->
+                    <div class="chart-card animate-in" style="animation-delay: 0.6s;">
+                        <div class="card-header">
+                            <h3>🚀 AdaBoost — Confusion Matrix</h3>
+                        </div>
+                        <div class="confusion-matrix-container">
+                            <table class="confusion-matrix" id="adaConfusionMatrix">
+                                <thead>
+                                    <tr id="adaCmHeader"></tr>
+                                </thead>
+                                <tbody id="adaCmBody"></tbody>
+                            </table>
+                            <div class="cm-legend">
+                                <span class="cm-axis-label">← Predicted Labels →</span>
+                                <span class="cm-axis-label-vertical">← Actual Labels →</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Metrics Table -->
+                <div class="metrics-table-card animate-in" style="animation-delay: 0.7s;">
+                    <div class="card-header">
+                        <h3>📋 Detailed Performance Metrics</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="metrics-table">
+                            <thead>
+                                <tr>
+                                    <th>Metric</th>
+                                    <th>🌲 Random Forest</th>
+                                    <th>🚀 AdaBoost</th>
+                                    <th>Difference</th>
+                                </tr>
+                            </thead>
+                            <tbody id="metricsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div id="metricsError" style="display: none;">
+                <div class="no-metrics-card">
+                    <div class="no-metrics-icon">📊</div>
+                    <h3>Models Not Trained Yet</h3>
+                    <p>Run <code>python model_train.py</code> to train the classifiers and generate performance metrics.
+                    </p>
+                    <a href="index.html" class="btn btn-primary">Go Home</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 CropVision AI — Deep Learning for Multi Crop Classification</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="static/js/script.js"></script>
+    <script src="static/js/models-page.js"></script>
+</body>
+
+</html>

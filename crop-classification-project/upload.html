@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Upload satellite images for AI-powered crop classification. Supports PNG, JPG, TIFF formats.">
+    <title>Upload Image — CropVision AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+
+<body>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="logo-icon">🛰️</span>
+                <span class="logo-text">CropVision<span class="logo-accent">AI</span></span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="upload.html" class="nav-link active">Upload Image</a></li>
+                <li><a href="models.html" class="nav-link">Model Comparison</a></li>
+                <li><a href="index.html#about" class="nav-link">About</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ==================== PAGE HEADER ==================== -->
+    <section class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <span class="section-tag">Step 1</span>
+                <h1 class="page-title">Upload Satellite Image</h1>
+                <p class="page-subtitle">
+                    Upload a Sentinel-2 satellite image or any crop field image.
+                    Our AI models will analyze and classify the crop type automatically.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== UPLOAD SECTION ==================== -->
+    <section class="section upload-section">
+        <div class="container">
+            <!-- Flash messages container -->
+            <div class="flash-messages" id="flashMessages"></div>
+
+            <div class="upload-grid">
+                <!-- Upload Card -->
+                <div class="upload-card" id="uploadCard">
+                    <div class="drop-zone" id="dropZone">
+                        <div class="drop-zone-content" id="dropContent">
+                            <div class="drop-icon">
+                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                    <polyline points="17 8 12 3 7 8" />
+                                    <line x1="12" y1="3" x2="12" y2="15" />
+                                </svg>
+                            </div>
+                            <h3>Drag & Drop Satellite Image</h3>
+                            <p>or click to browse files</p>
+                            <div class="drop-formats">
+                                <span>PNG</span>
+                                <span>JPG</span>
+                                <span>JPEG</span>
+                                <span>TIFF</span>
+                                <span>BMP</span>
+                            </div>
+                            <p class="drop-size-hint">Maximum file size: 16 MB</p>
+                        </div>
+                        <!-- Image Preview (hidden by default) -->
+                        <div class="preview-container" id="previewContainer" style="display: none;">
+                            <img id="imagePreview" alt="Preview" class="image-preview">
+                            <div class="preview-info" id="previewInfo"></div>
+                            <button type="button" class="btn-remove-image" id="removeImage"
+                                title="Remove image">×</button>
+                        </div>
+                        <input type="file" id="fileInput" accept=".png,.jpg,.jpeg,.tif,.tiff,.bmp" hidden>
+                    </div>
+
+                    <div style="margin-bottom: 15px; text-align: left; display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="bypassValidator" name="bypass" style="cursor: pointer;">
+                        <label for="bypassValidator" style="color: #a0aec0; font-size: 0.9em; cursor: pointer;">
+                            Bypass Image Validation (Dev Mode)
+                        </label>
+                    </div>
+
+                    <button type="button" class="btn btn-primary btn-full btn-glow" id="classifyBtn" disabled>
+                        <span class="btn-icon">🔬</span>
+                        <span id="btnText">Start Classification</span>
+                        <div class="btn-loader" id="btnLoader" style="display: none;">
+                            <div class="spinner"></div>
+                            <span>Analyzing Image...</span>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Instructions Card -->
+                <div class="instructions-card">
+                    <h3>📋 How It Works</h3>
+                    <div class="instruction-steps">
+                        <div class="instruction-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Upload Image</h4>
+                                <p>Drag and drop or click to select a satellite image from your device.</p>
+                            </div>
+                        </div>
+                        <div class="instruction-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Preview & Confirm</h4>
+                                <p>Review the uploaded image preview and click "Start Classification".</p>
+                            </div>
+                        </div>
+                        <div class="instruction-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>AI Processing</h4>
+                                <p>Our ML models (Random Forest & AdaBoost) analyze the spectral features.</p>
+                            </div>
+                        </div>
+                        <div class="instruction-step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>View Results</h4>
+                                <p>Get detailed predictions with crop type, confidence score, and probabilities.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="supported-crops">
+                        <h4>Supported Crop Types</h4>
+                        <div class="crop-badges">
+                            <span class="crop-badge rice">🌾 Rice</span>
+                            <span class="crop-badge wheat">🌿 Wheat</span>
+                            <span class="crop-badge maize">🌽 Maize</span>
+                            <span class="crop-badge cotton">☁️ Cotton</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== RESULT SECTION (hidden, shown after classification) ==================== -->
+    <section class="section results-section" id="resultsSection" style="display: none;">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag success-tag">✅ Classification Complete</span>
+                <h2 class="section-title">Prediction Results</h2>
+                <p class="section-subtitle">Your satellite image has been analyzed using our trained ML models.</p>
+            </div>
+
+            <div class="result-grid">
+                <!-- Uploaded Image Card -->
+                <div class="result-card image-card animate-in">
+                    <div class="card-header">
+                        <h3>📷 Uploaded Image</h3>
+                        <span class="card-badge" id="resultFilename"></span>
+                    </div>
+                    <div class="image-display">
+                        <img id="resultImage" alt="Uploaded satellite image" class="result-image">
+                    </div>
+                </div>
+
+                <!-- Random Forest Prediction Card -->
+                <div class="result-card prediction-card animate-in" style="animation-delay: 0.2s;">
+                    <div class="card-header">
+                        <h3>🌲 Random Forest Prediction</h3>
+                        <span class="card-badge primary-badge">Primary Model</span>
+                    </div>
+                    <div class="prediction-result">
+                        <div class="crop-icon-large" id="rfCropIcon"></div>
+                        <h2 class="predicted-crop" id="rfCropName"></h2>
+                        <div class="confidence-meter">
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" id="rfConfidenceBar"></div>
+                            </div>
+                            <span class="confidence-value" id="rfConfidenceText"></span>
+                        </div>
+                        <p class="crop-description" id="rfCropDescription"></p>
+                    </div>
+                    <div class="probability-section">
+                        <h4>Class Probabilities</h4>
+                        <div class="probability-bars" id="rfProbBars"></div>
+                    </div>
+                </div>
+
+                <!-- AdaBoost Prediction Card -->
+                <div class="result-card prediction-card secondary animate-in" style="animation-delay: 0.4s;">
+                    <div class="card-header">
+                        <h3>🚀 AdaBoost Prediction</h3>
+                        <span class="card-badge secondary-badge">Secondary Model</span>
+                    </div>
+                    <div class="prediction-result">
+                        <div class="crop-icon-large" id="adaCropIcon"></div>
+                        <h2 class="predicted-crop ada-crop" id="adaCropName"></h2>
+                        <div class="confidence-meter">
+                            <div class="confidence-bar">
+                                <div class="confidence-fill ada-fill" id="adaConfidenceBar"></div>
+                            </div>
+                            <span class="confidence-value ada-confidence-val" id="adaConfidenceText"></span>
+                        </div>
+                    </div>
+                    <div class="probability-section">
+                        <h4>Class Probabilities</h4>
+                        <div class="probability-bars" id="adaProbBars"></div>
+                    </div>
+                </div>
+
+                <!-- Chart Card -->
+                <div class="result-card chart-card animate-in" style="animation-delay: 0.6s;">
+                    <div class="card-header">
+                        <h3>📊 Probability Comparison</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="probabilityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="result-actions">
+                <button onclick="resetAndUploadNew()" class="btn btn-primary btn-lg">
+                    <span class="btn-icon">📤</span>
+                    Classify Another Image
+                </button>
+                <a href="models.html" class="btn btn-outline-dark btn-lg">
+                    <span class="btn-icon">📊</span>
+                    View Model Comparison
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 CropVision AI — Deep Learning for Multi Crop Classification</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="static/js/script.js"></script>
+    <script>
+    // Wire the classify button to submit via the Flask /api/predict backend
+    // instead of the removed client-side fake classifier
+    document.addEventListener('DOMContentLoaded', function() {
+        var classifyBtn = document.getElementById('classifyBtn');
+        if (classifyBtn) {
+            classifyBtn.addEventListener('click', async function() {
+                var fileInput = document.getElementById('fileInput');
+                if (!fileInput || !fileInput.files.length) return;
+
+                var btnText = document.getElementById('btnText');
+                var btnLoader = document.getElementById('btnLoader');
+                if (btnText) btnText.style.display = 'none';
+                if (btnLoader) btnLoader.style.display = 'flex';
+                classifyBtn.disabled = true;
+
+                var formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+                var bypassCheckbox = document.getElementById('bypassValidator');
+                if (bypassCheckbox && bypassCheckbox.checked) {
+                    formData.append('bypass', 'true');
+                }
+
+                try {
+                    var response = await fetch('/api/predict', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    var data = await response.json();
+
+                    if (!response.ok || data.error) {
+                        alert('\u26A0\uFE0F Validation Failed\n\n' + (data.error || 'Unknown error') + '\n\nPlease upload a valid satellite image.');
+                        if (btnText) btnText.style.display = 'inline';
+                        if (btnLoader) btnLoader.style.display = 'none';
+                        classifyBtn.disabled = false;
+                        return;
+                    }
+
+                    // Redirect to the Flask-served result page by submitting
+                    // the same file through a proper form POST to /predict
+                    var form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/predict';
+                    form.enctype = 'multipart/form-data';
+                    var input = document.createElement('input');
+                    input.type = 'file';
+                    input.name = 'file';
+                    // We need to re-submit, so create a DataTransfer to set files
+                    var dt = new DataTransfer();
+                    dt.items.add(fileInput.files[0]);
+                    input.files = dt.files;
+                    form.appendChild(input);
+
+                    if (bypassCheckbox && bypassCheckbox.checked) {
+                        var bypassInput = document.createElement('input');
+                        bypassInput.type = 'hidden';
+                        bypassInput.name = 'bypass';
+                        bypassInput.value = 'true';
+                        form.appendChild(bypassInput);
+                    }
+
+                    document.body.appendChild(form);
+                    form.submit();
+                } catch (err) {
+                    alert('\u26A0\uFE0F Error\n\n' + err.message + '\n\nPlease make sure the Flask server is running.');
+                    if (btnText) btnText.style.display = 'inline';
+                    if (btnLoader) btnLoader.style.display = 'none';
+                    classifyBtn.disabled = false;
+                }
+            });
+        }
+    });
+    </script>
+</body>
+
+</html>

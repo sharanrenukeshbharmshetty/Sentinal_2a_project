@@ -1,0 +1,169 @@
+<mxfile host="app.diagrams.net" modified="2024-05-19T00:00:00.000Z" agent="Mozilla/5.0" version="24.4.4" type="device">
+  <diagram name="DeepCrop AI Architecture" id="deepcrop-arch">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ==================== GROUPS (SWIMLANES) ==================== -->
+        
+        <mxCell id="frontend_group" value="Frontend Layer (UI)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;startSize=30;" vertex="1" parent="1">
+          <mxGeometry x="20" y="100" width="180" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="backend_group" value="Backend Layer" style="swimlane;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;startSize=30;" vertex="1" parent="1">
+          <mxGeometry x="250" y="100" width="200" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="processing_group" value="Data Processing Engine" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;startSize=30;" vertex="1" parent="1">
+          <mxGeometry x="500" y="40" width="220" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="ml_group" value="Ensemble Intelligence Engine" style="swimlane;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1;startSize=30;" vertex="1" parent="1">
+          <mxGeometry x="780" y="70" width="200" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="output_group" value="Agricultural Analytics" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;startSize=30;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="100" width="180" height="240" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== NODES ==================== -->
+
+        <!-- Frontend Nodes -->
+        <mxCell id="react_ui" value="React.js SPA&#xa;(Interactive Dashboard)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="frontend_group">
+          <mxGeometry x="20" y="60" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="html_templates" value="Flask HTML Templates&#xa;(Fallback UI)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="frontend_group">
+          <mxGeometry x="20" y="150" width="140" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Backend Nodes -->
+        <mxCell id="flask_app" value="Flask API Gateway&#xa;(app.py)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;fontStyle=1" vertex="1" parent="backend_group">
+          <mxGeometry x="20" y="60" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sqlite_db" value="SQLite Database&#xa;(deepcrop.db)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#ffffff;strokeColor=#b85450;" vertex="1" parent="backend_group">
+          <mxGeometry x="40" y="140" width="120" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Processing Nodes -->
+        <mxCell id="validation" value="Heuristic Validation&#xa;(is_satellite_image)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00;" vertex="1" parent="processing_group">
+          <mxGeometry x="35" y="50" width="150" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="feature_extraction" value="CV Feature Extraction&#xa;(150+ Features)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00;" vertex="1" parent="processing_group">
+          <mxGeometry x="40" y="180" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="pca_scaling" value="PCA &amp; StandardScaler&#xa;(Dimension Reduction)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00;" vertex="1" parent="processing_group">
+          <mxGeometry x="40" y="270" width="140" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ML Engine Nodes -->
+        <mxCell id="rf_model" value="Random Forest Classifier" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;" vertex="1" parent="ml_group">
+          <mxGeometry x="30" y="60" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ada_model" value="AdaBoost Classifier" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;" vertex="1" parent="ml_group">
+          <mxGeometry x="30" y="140" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hybrid_model" value="Hybrid Voting Model&#xa;(Main Predictor)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1" vertex="1" parent="ml_group">
+          <mxGeometry x="30" y="220" width="140" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Output Nodes -->
+        <mxCell id="result_synthesis" value="Result Synthesis &amp;&#xa;Crop Info Mapping" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;" vertex="1" parent="output_group">
+          <mxGeometry x="20" y="60" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="climate_data" value="Geographic / Climate&#xa;Data Payload" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#ffffff;strokeColor=#d6b656;" vertex="1" parent="output_group">
+          <mxGeometry x="25" y="160" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== EDGES ==================== -->
+
+        <!-- Frontend to Backend -->
+        <mxCell id="edge_react_flask" value="API Request (JSON)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.25;strokeColor=#000000;" edge="1" parent="1" source="react_ui" target="flask_app">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_html_flask" value="Form POST" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.75;strokeColor=#000000;" edge="1" parent="1" source="html_templates" target="flask_app">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Flask to Validation -->
+        <mxCell id="edge_flask_val" value="Image Payload" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeWidth=2;strokeColor=#000000;" edge="1" parent="1" source="flask_app" target="validation">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Validation to Processing -->
+        <mxCell id="edge_val_feat" value="Valid Image" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeWidth=2;strokeColor=#2D7600;fontColor=#2D7600;" edge="1" parent="1" source="validation" target="feature_extraction">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Validation to Flask (Error) -->
+        <mxCell id="edge_val_err" value="Invalid / Non-Satellite" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#FF0000;fontColor=#FF0000;dashed=1;" edge="1" parent="1" source="validation" target="flask_app">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="610" y="20" />
+              <mxPoint x="350" y="20" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Processing Pipeline -->
+        <mxCell id="edge_feat_pca" value="150+ CV Features" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;" edge="1" parent="1" source="feature_extraction" target="pca_scaling">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- PCA to Models -->
+        <mxCell id="edge_pca_rf" value="120 Components" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#000000;" edge="1" parent="1" source="pca_scaling" target="rf_model">
+          <mxGeometry relative="1" as="geometry">
+             <Array as="points">
+               <mxPoint x="750" y="340" />
+               <mxPoint x="750" y="155" />
+             </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_pca_ada" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#000000;" edge="1" parent="1" source="pca_scaling" target="ada_model">
+          <mxGeometry relative="1" as="geometry">
+             <Array as="points">
+               <mxPoint x="750" y="340" />
+               <mxPoint x="750" y="235" />
+             </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_pca_hybrid" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#000000;" edge="1" parent="1" source="pca_scaling" target="hybrid_model">
+          <mxGeometry relative="1" as="geometry">
+             <Array as="points">
+               <mxPoint x="750" y="340" />
+               <mxPoint x="750" y="320" />
+             </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Models to Synthesis -->
+        <mxCell id="edge_rf_syn" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.25;strokeColor=#000000;" edge="1" parent="1" source="rf_model" target="result_synthesis">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_ada_syn" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#000000;" edge="1" parent="1" source="ada_model" target="result_synthesis">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_hyb_syn" value="Prediction &amp; Confidence" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.75;strokeColor=#000000;strokeWidth=2;" edge="1" parent="1" source="hybrid_model" target="result_synthesis">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Output Inter-connections -->
+        <mxCell id="edge_syn_doc" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;" edge="1" parent="1" source="result_synthesis" target="climate_data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Back to User -->
+        <mxCell id="edge_syn_ui" value="Formatted JSON Response" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=1;strokeColor=#000000;dashed=1;strokeWidth=2;" edge="1" parent="1" source="climate_data" target="react_ui">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1150" y="440" />
+              <mxPoint x="110" y="440" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Backend to DB -->
+        <mxCell id="edge_flask_db" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#000000;" edge="1" parent="1" source="flask_app" target="sqlite_db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

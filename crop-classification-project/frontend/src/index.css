@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-textPrimary font-sans antialiased;
+    overscroll-behavior-y: none;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-card/60 backdrop-blur-md border border-[rgba(255,255,255,0.08)] rounded-2xl shadow-lg transition-all duration-300;
+  }
+  
+  .glass-card:hover {
+    @apply border-[rgba(0,245,212,0.3)] shadow-[0_8px_32px_rgba(0,245,212,0.15)] -translate-y-1;
+  }
+
+  .nav-item {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl text-textPrimary/70 hover:text-primary hover:bg-primary/10 transition-colors duration-200 cursor-pointer;
+  }
+
+  .nav-item.active {
+    @apply text-primary bg-primary/15 border border-primary/20;
+  }
+
+  .heading-glow {
+    text-shadow: 0 0 20px rgba(0, 245, 212, 0.5);
+  }
+  
+  .btn-primary {
+    @apply px-6 py-2 rounded-lg bg-primary/20 text-primary border border-primary/50 hover:bg-primary hover:text-background transition-all duration-300 font-medium;
+  }
+}
+
+/* Custom scrollbar for a modern look */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}

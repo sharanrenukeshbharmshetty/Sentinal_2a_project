@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Comparison — DeepCrop AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="app-layout">
+
+        <!-- ===== FLOATING SIDEBAR BOX ===== -->
+        <aside class="sidebar-box" id="sidebar">
+            <div class="sidebar-header">
+                <a href="/" class="sidebar-logo">
+                    <span class="logo-icon">🛰️</span>
+                    <span class="nav-text">Deep<span class="logo-accent">Crop</span> AI</span>
+                </a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-item {{ 'active' if request.path == '/' }}"><span class="nav-icon">🏠</span> <span class="nav-text">Dashboard</span></a>
+                <a href="/upload" class="nav-item {{ 'active' if request.path == '/upload' }}"><span class="nav-icon">📤</span> <span class="nav-text">Upload Image</span></a>
+                <a href="/models" class="nav-item {{ 'active' if request.path == '/models' }}"><span class="nav-icon">📊</span> <span class="nav-text">Model Comparison</span></a>
+                <a href="/#about" class="nav-item"><span class="nav-icon">ℹ️</span> <span class="nav-text">About Project</span></a>
+            </nav>
+            <div class="sidebar-footer">
+                <p>© 2024 DeepCrop AI</p>
+                <p>Final Year Project</p>
+            </div>
+        </aside>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        
+        
+
+        <div id="earth-container"></div>
+        <main class="main-content">
+            
+            <header class="top-header">
+                <button class="nav-toggle" id="desktopToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <div class="header-actions"><div class="header-badge"><span class="pulse-dot"></span> Models Loaded</div></div>
+            </header>
+
+            <section class="page-header">
+                <div class="page-header-content">
+                    <span class="section-tag">Performance Analysis</span>
+                    <h1 class="page-title">Model Comparison</h1>
+                    <p class="page-subtitle">Compare Random Forest and AdaBoost classifier performance.</p>
+                </div>
+            </section>
+
+            <section class="section models-section">
+                <div class="page-content">
+                    {% if metrics %}
+
+                    <!-- Accuracy Cards -->
+                    <div class="metrics-overview" style="display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 10px; align-items: center;">
+                        <div class="metric-hero-card rf-hero animate-in">
+                            <div class="metric-hero-icon">🌲</div>
+                            <h3>Random Forest</h3>
+                            <div class="metric-hero-value">{{ (metrics.random_forest.accuracy * 100) | round(2) }}%</div>
+                            <span class="metric-hero-label">Accuracy</span>
+                            <div class="metric-hero-details">
+                                <div><span class="detail-value">{{ (metrics.random_forest.precision * 100) | round(2) }}%</span><span class="detail-label">Precision</span></div>
+                                <div><span class="detail-value">{{ (metrics.random_forest.recall * 100) | round(2) }}%</span><span class="detail-label">Recall</span></div>
+                                <div><span class="detail-value">{{ (metrics.random_forest.f1_score * 100) | round(2) }}%</span><span class="detail-label">F1</span></div>
+                            </div>
+                        </div>
+                        <div class="vs-badge" style="font-size: 0.8rem;">VS</div>
+                        <div class="metric-hero-card ada-hero animate-in" style="animation-delay:.2s">
+                            <div class="metric-hero-icon">🚀</div>
+                            <h3>AdaBoost</h3>
+                            <div class="metric-hero-value">{{ (metrics.adaboost.accuracy * 100) | round(2) }}%</div>
+                            <span class="metric-hero-label">Accuracy</span>
+                            <div class="metric-hero-details">
+                                <div><span class="detail-value">{{ (metrics.adaboost.precision * 100) | round(2) }}%</span><span class="detail-label">Precision</span></div>
+                                <div><span class="detail-value">{{ (metrics.adaboost.recall * 100) | round(2) }}%</span><span class="detail-label">Recall</span></div>
+                                <div><span class="detail-value">{{ (metrics.adaboost.f1_score * 100) | round(2) }}%</span><span class="detail-label">F1</span></div>
+                            </div>
+                        </div>
+                        <div class="vs-badge" style="font-size: 0.8rem;">VS</div>
+                        <div class="metric-hero-card hybrid-hero animate-in" style="animation-delay:.4s; border: 2px solid #a855f7;">
+                            <div class="metric-hero-icon" style="color: #c084fc;">🧠</div>
+                            <h3 style="color: #c084fc;">Hybrid Model</h3>
+                            <div class="metric-hero-value" style="color: #a855f7;">{{ (metrics.hybrid.accuracy * 100) | round(2) }}%</div>
+                            <span class="metric-hero-label">Accuracy</span>
+                            <div class="metric-hero-details">
+                                <div><span class="detail-value" style="color: #e9d5ff;">{{ (metrics.hybrid.precision * 100) | round(2) }}%</span><span class="detail-label">Precision</span></div>
+                                <div><span class="detail-value" style="color: #e9d5ff;">{{ (metrics.hybrid.recall * 100) | round(2) }}%</span><span class="detail-label">Recall</span></div>
+                                <div><span class="detail-value" style="color: #e9d5ff;">{{ (metrics.hybrid.f1_score * 100) | round(2) }}%</span><span class="detail-label">F1</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts -->
+                    <div class="charts-grid">
+                        <div class="chart-card animate-in" style="animation-delay:.3s"><div class="card-header"><h3>📊 Accuracy Comparison</h3></div><div class="chart-container"><canvas id="accuracyChart"></canvas></div></div>
+                        <div class="chart-card animate-in" style="animation-delay:.4s"><div class="card-header"><h3>🎯 Performance Radar</h3></div><div class="chart-container"><canvas id="radarChart"></canvas></div></div>
+
+                        <!-- RF Confusion Matrix -->
+                        <div class="chart-card animate-in" style="animation-delay:.5s">
+                            <div class="card-header"><h3>🌲 RF — Confusion Matrix</h3></div>
+                            <div class="confusion-matrix-container"><table class="confusion-matrix" id="rfConfusionMatrix">
+                                <thead><tr><th></th>{% for cls in metrics.crop_classes %}<th>{{ cls }}</th>{% endfor %}</tr></thead>
+                                <tbody>{% for i in range(metrics.crop_classes|length) %}<tr><th>{{ metrics.crop_classes[i] }}</th>{% for j in range(metrics.crop_classes|length) %}<td class="{% if i == j %}cm-diagonal{% endif %}" data-value="{{ metrics.random_forest.confusion_matrix[i][j] }}">{{ metrics.random_forest.confusion_matrix[i][j] }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+                            </table><div class="cm-legend"><span class="cm-axis-label">← Predicted Labels →</span></div></div>
+                        </div>
+
+                        <!-- Ada Confusion Matrix -->
+                        <div class="chart-card animate-in" style="animation-delay:.6s">
+                            <div class="card-header"><h3>🚀 AdaBoost — Confusion Matrix</h3></div>
+                            <div class="confusion-matrix-container"><table class="confusion-matrix" id="adaConfusionMatrix">
+                                <thead><tr><th></th>{% for cls in metrics.crop_classes %}<th>{{ cls }}</th>{% endfor %}</tr></thead>
+                                <tbody>{% for i in range(metrics.crop_classes|length) %}<tr><th>{{ metrics.crop_classes[i] }}</th>{% for j in range(metrics.crop_classes|length) %}<td class="{% if i == j %}cm-diagonal{% endif %}" data-value="{{ metrics.adaboost.confusion_matrix[i][j] }}">{{ metrics.adaboost.confusion_matrix[i][j] }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+                            </table><div class="cm-legend"><span class="cm-axis-label">← Predicted Labels →</span></div></div>
+                        </div>
+
+                        <!-- Hybrid Confusion Matrix -->
+                        <div class="chart-card animate-in" style="animation-delay:.7s; border: 1px solid rgba(168,85,247,0.3);">
+                            <div class="card-header"><h3 style="color: #c084fc;">🧠 Hybrid — Confusion Matrix</h3></div>
+                            <div class="confusion-matrix-container"><table class="confusion-matrix" id="hybridConfusionMatrix">
+                                <thead><tr><th></th>{% for cls in metrics.crop_classes %}<th>{{ cls }}</th>{% endfor %}</tr></thead>
+                                <tbody>{% for i in range(metrics.crop_classes|length) %}<tr><th>{{ metrics.crop_classes[i] }}</th>{% for j in range(metrics.crop_classes|length) %}<td class="{% if i == j %}cm-diagonal-hybrid cm-diagonal{% endif %}" data-value="{{ metrics.hybrid.confusion_matrix[i][j] }}">{{ metrics.hybrid.confusion_matrix[i][j] }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+                            </table><div class="cm-legend"><span class="cm-axis-label" style="color: #c084fc;">← Predicted Labels →</span></div></div>
+                        </div>
+                    </div>
+
+                    <!-- Metrics Table -->
+                    <div class="metrics-table-card animate-in" style="animation-delay:.7s">
+                        <div class="card-header"><h3>📋 Detailed Performance Metrics</h3></div>
+                        <div class="table-responsive"><table class="metrics-table">
+                            <thead><tr><th>Metric</th><th>🌲 Random Forest</th><th>🚀 AdaBoost</th><th>🧠 Hybrid Model</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>Accuracy</strong></td><td>{{ (metrics.random_forest.accuracy * 100) | round(2) }}%</td><td>{{ (metrics.adaboost.accuracy * 100) | round(2) }}%</td><td style="color:#c084fc;font-weight:700;">{{ (metrics.hybrid.accuracy * 100) | round(2) }}%</td></tr>
+                                <tr><td><strong>Precision</strong></td><td>{{ (metrics.random_forest.precision * 100) | round(2) }}%</td><td>{{ (metrics.adaboost.precision * 100) | round(2) }}%</td><td style="color:#c084fc;font-weight:700;">{{ (metrics.hybrid.precision * 100) | round(2) }}%</td></tr>
+                                <tr><td><strong>Recall</strong></td><td>{{ (metrics.random_forest.recall * 100) | round(2) }}%</td><td>{{ (metrics.adaboost.recall * 100) | round(2) }}%</td><td style="color:#c084fc;font-weight:700;">{{ (metrics.hybrid.recall * 100) | round(2) }}%</td></tr>
+                                <tr><td><strong>F1-Score</strong></td><td>{{ (metrics.random_forest.f1_score * 100) | round(2) }}%</td><td>{{ (metrics.adaboost.f1_score * 100) | round(2) }}%</td><td style="color:#c084fc;font-weight:700;">{{ (metrics.hybrid.f1_score * 100) | round(2) }}%</td></tr>
+                            </tbody>
+                        </table></div>
+                    </div>
+
+                    {% else %}
+                    <div class="no-metrics-card"><div class="no-metrics-icon">📊</div><h3>Models Not Trained Yet</h3><p>Run <code>python model_train.py</code> to train classifiers.</p><a href="/" class="btn btn-primary">Go Home</a></div>
+                    {% endif %}
+                </div>
+            </section>
+
+            <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2024 DeepCrop AI</p></div></div></footer>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {% if metrics %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var chartFont = { family:'Inter, sans-serif', weight:'500' };
+            var txtColor = 'rgba(229, 231, 235, 0.7)';
+            var gridColor = 'rgba(255,255,255,0.06)';
+
+            // Bar Chart
+            var ctx1 = document.getElementById('accuracyChart');
+            if (ctx1) { new Chart(ctx1, { type:'bar', data:{ labels:['Accuracy','Precision','Recall','F1-Score'], datasets:[
+                { label:'Hybrid', data:[{{ (metrics.hybrid.accuracy*100)|round(2) }},{{ (metrics.hybrid.precision*100)|round(2) }},{{ (metrics.hybrid.recall*100)|round(2) }},{{ (metrics.hybrid.f1_score*100)|round(2) }}], backgroundColor:'rgba(168,85,247,0.75)', borderColor:'rgba(168,85,247,1)', borderWidth:1, borderRadius:8 },
+                { label:'Random Forest', data:[{{ (metrics.random_forest.accuracy*100)|round(2) }},{{ (metrics.random_forest.precision*100)|round(2) }},{{ (metrics.random_forest.recall*100)|round(2) }},{{ (metrics.random_forest.f1_score*100)|round(2) }}], backgroundColor:'rgba(0, 245, 212, 0.75)', borderColor:'rgba(0, 245, 212, 1)', borderWidth:1, borderRadius:8 },
+                { label:'AdaBoost', data:[{{ (metrics.adaboost.accuracy*100)|round(2) }},{{ (metrics.adaboost.precision*100)|round(2) }},{{ (metrics.adaboost.recall*100)|round(2) }},{{ (metrics.adaboost.f1_score*100)|round(2) }}], backgroundColor:'rgba(59, 130, 246, 0.75)', borderColor:'rgba(59, 130, 246, 1)', borderWidth:1, borderRadius:8 }
+            ]}, options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'top', labels:{color:'#E5E7EB',font:{...chartFont,size:13},usePointStyle:true,padding:20} }, tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.parsed.y.toFixed(2)+'%'}}} }, scales:{ y:{beginAtZero:true,max:100,ticks:{color:txtColor},grid:{color:gridColor},title:{display:true,text:'Score (%)',color:txtColor,font:chartFont}}, x:{ticks:{color:txtColor},grid:{display:false}} } } }); }
+
+            // Radar Chart
+            var ctx2 = document.getElementById('radarChart');
+            if (ctx2) { new Chart(ctx2, { type:'radar', data:{ labels:['Accuracy','Precision','Recall','F1-Score'], datasets:[
+                { label:'Hybrid', data:[{{ (metrics.hybrid.accuracy*100)|round(2) }},{{ (metrics.hybrid.precision*100)|round(2) }},{{ (metrics.hybrid.recall*100)|round(2) }},{{ (metrics.hybrid.f1_score*100)|round(2) }}], backgroundColor:'rgba(168,85,247,0.1)', borderColor:'rgba(168,85,247,1)', borderWidth:2, pointBackgroundColor:'rgba(168,85,247,1)', pointBorderColor:'#fff', pointBorderWidth:2,pointRadius:5 },
+                { label:'Random Forest', data:[{{ (metrics.random_forest.accuracy*100)|round(2) }},{{ (metrics.random_forest.precision*100)|round(2) }},{{ (metrics.random_forest.recall*100)|round(2) }},{{ (metrics.random_forest.f1_score*100)|round(2) }}], backgroundColor:'rgba(0, 245, 212, 0.1)', borderColor:'rgba(0, 245, 212, 1)', borderWidth:2, pointBackgroundColor:'rgba(0, 245, 212, 1)', pointBorderColor:'#fff', pointBorderWidth:2,pointRadius:5 },
+                { label:'AdaBoost', data:[{{ (metrics.adaboost.accuracy*100)|round(2) }},{{ (metrics.adaboost.precision*100)|round(2) }},{{ (metrics.adaboost.recall*100)|round(2) }},{{ (metrics.adaboost.f1_score*100)|round(2) }}], backgroundColor:'rgba(59, 130, 246, 0.1)', borderColor:'rgba(59, 130, 246, 1)', borderWidth:2, pointBackgroundColor:'rgba(59, 130, 246, 1)', pointBorderColor:'#fff', pointBorderWidth:2,pointRadius:5 }
+            ]}, options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'top', labels:{color:'#E5E7EB',font:{...chartFont,size:13},usePointStyle:true,padding:20} } }, scales:{ r:{beginAtZero:true,max:100,ticks:{stepSize:20,backdropColor:'transparent',color:txtColor,font:{size:10}},grid:{color:gridColor},pointLabels:{color:'#E5E7EB',font:{...chartFont,size:13}}} } } }); }
+
+            // Colorize confusion matrices
+            document.querySelectorAll('.confusion-matrix td').forEach(function(cell) {
+                var val = parseInt(cell.dataset.value);
+                if (cell.classList.contains('cm-diagonal-hybrid')) {
+                    var i = Math.min(val/120,1);
+                    cell.style.backgroundColor = 'rgba(168,85,247,'+(0.1+i*0.4)+')';
+                    cell.style.color = '#fff';
+                    cell.style.fontWeight = '700';
+                } else if (cell.classList.contains('cm-diagonal')) {
+                    var i = Math.min(val/120,1);
+                    cell.style.backgroundColor = 'rgba(0, 245, 212,'+(0.08+i*0.35)+')';
+                    cell.style.color = '#fff';
+                    cell.style.fontWeight = '700';
+                } else {
+                    var i2 = Math.min(val/50,1);
+                    cell.style.backgroundColor = 'rgba(239, 68, 68,'+(i2*0.2)+')';
+                    if(val>0) cell.style.color='#ef4444';
+                }
+            });
+        });
+    </script>
+    {% endif %}
+</body>
+</html>
